@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bidding - LelangKu</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-brand">
+      <div class="logo-icon">LK</div>
+      LelangKu
+    </a>
+    <div class="navbar-nav">
+      <a href="katalog.html">Katalog</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+    <div class="navbar-actions" id="navActions">
+      <a href="login.html" class="btn btn-ghost">Masuk</a>
+    </div>
+  </div>
+</nav>
+
+<div class="bidding-layout" style="padding-top:70px;">
+  <!-- MAIN -->
+  <div class="bidding-main">
+    <a href="katalog.html" class="btn btn-ghost btn-sm" style="margin-bottom:16px;">← Kembali ke Katalog</a>
+
+    <div class="card" style="margin-bottom:24px;">
+      <div class="card-body">
+        <div style="display:flex;gap:24px;align-items:flex-start;">
+          <div id="carImageContainer" style="flex:0 0 280px;background:var(--gray-50);border-radius:var(--radius);overflow:hidden;text-align:center;min-height:200px;display:flex;align-items:center;justify-content:center;">
+            <div style="font-size:6rem;" id="carEmoji">🚗</div>
+            <img id="carImage" src="" alt="" style="display:none;width:100%;height:280px;object-fit:cover;">
+          </div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+              <span class="badge" id="gradeBadge">Grade A</span>
+              <span class="badge" id="statusBadge">Live</span>
+            </div>
+            <h1 style="font-size:1.6rem;font-weight:800;margin-bottom:12px;" id="carName">--</h1>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
+              <div style="padding:12px;background:var(--gray-50);border-radius:var(--radius-sm);">
+                <div style="font-size:.7rem;color:var(--gray);text-transform:uppercase;">Tahun</div>
+                <div style="font-weight:700;" id="carYear">--</div>
+              </div>
+              <div style="padding:12px;background:var(--gray-50);border-radius:var(--radius-sm);">
+                <div style="font-size:.7rem;color:var(--gray);text-transform:uppercase;">Kilometer</div>
+                <div style="font-weight:700;" id="carKm">--</div>
+              </div>
+              <div style="padding:12px;background:var(--gray-50);border-radius:var(--radius-sm);">
+                <div style="font-size:.7rem;color:var(--gray);text-transform:uppercase;">Lokasi</div>
+                <div style="font-weight:700;" id="carLoc">--</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div style="padding:12px;background:var(--gray-50);border-radius:var(--radius-sm);">
+                <div style="font-size:.7rem;color:var(--gray);text-transform:uppercase;">BPKB</div>
+                <div style="font-weight:700;" id="carBpkb">--</div>
+              </div>
+              <div style="padding:12px;background:var(--gray-50);border-radius:var(--radius-sm);">
+                <div style="font-size:.7rem;color:var(--gray);text-transform:uppercase;">STNK</div>
+                <div style="font-weight:700;" id="carStnk">--</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BID HISTORY -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Riwayat Bid</h3>
+        <span class="badge badge-info" id="totalBids">0 bid</span>
+      </div>
+      <div class="card-body">
+        <div id="bidHistoryList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR - BIDDING PANEL -->
+  <div class="bidding-sidebar">
+    <div class="bid-timer">
+      <div class="timer-label">Sisa Waktu Lelang</div>
+      <div class="timer-display" id="bidTimer">00:00:00</div>
+    </div>
+
+    <div class="bid-current">
+      <h3>Harga Saat Ini</h3>
+      <div class="bid-amount" id="currentPrice">--</div>
+      <div class="bid-increment">Increment: <strong id="incrementVal">--</strong></div>
+    </div>
+
+    <div class="bid-actions">
+      <button class="btn btn-primary btn-lg btn-block" id="bidBtn" onclick="placeBid()">
+        🔨 Bid Sekarang
+      </button>
+    </div>
+
+    <div style="font-size:.8rem;color:var(--gray);margin-bottom:16px;text-align:center;">
+      Atau pilih jumlah cepat:
+    </div>
+    <div class="bid-quick-amounts" id="quickAmounts"></div>
+
+    <div style="margin-top:24px;padding:16px;background:var(--gray-50);border-radius:var(--radius-sm);font-size:.8rem;color:var(--gray);">
+      <strong style="color:var(--dark);">Catatan:</strong><br>
+      • Harga minimum tersembunyi (Reserve Price)<br>
+      • Jika ada bid di detik akhir, waktu diperpanjang otomatis<br>
+      • Deposit akan ditahan saat bid aktif
+    </div>
+  </div>
+</div>
+
+<!-- WINNER MODAL -->
+<div class="modal-overlay" id="winnerModal">
+  <div class="modal">
+    <div style="text-align:center;margin-bottom:16px;font-size:3rem;">🏆</div>
+    <h3 style="text-align:center;">Lelang Selesai!</h3>
+    <p style="text-align:center;" id="winnerMsg">Pemenang akan ditentukan setelah lelang berakhir.</p>
+    <div class="modal-actions" style="justify-content:center;">
+      <a href="katalog.html" class="btn btn-primary">Kembali ke Katalog</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const vehicleId = params.get('id') || 'V001';
+  let vehicle;
+  let timerInterval;
+
+  function loadVehicle() {
+    const db = getDB();
+    vehicle = db.vehicles.find(v => v.id === vehicleId);
+    if (!vehicle) {
+      document.querySelector('.bidding-main').innerHTML = '<div style="text-align:center;padding:60px;color:var(--gray);">Kendaraan tidak ditemukan. <a href="katalog.html">Kembali ke katalog</a></div>';
+      return;
+    }
+
+    document.getElementById('carEmoji').textContent = vehicle.img;
+
+    // Display image from URL or emoji
+    const carImage = document.getElementById('carImage');
+    const carEmoji = document.getElementById('carEmoji');
+    if (vehicle.imageUrl) {
+      carImage.src = vehicle.imageUrl;
+      carImage.alt = vehicle.name;
+      carImage.style.display = 'block';
+      carEmoji.style.display = 'none';
+    } else {
+      carImage.style.display = 'none';
+      carEmoji.style.display = 'block';
+    }
+
+    document.getElementById('carName').textContent = vehicle.name;
+    document.getElementById('carYear').textContent = vehicle.year;
+    document.getElementById('carKm').textContent = vehicle.km.toLocaleString('id-ID') + ' km';
+    document.getElementById('carLoc').textContent = vehicle.location;
+    document.getElementById('carBpkb').textContent = vehicle.bpkb;
+    document.getElementById('carStnk').textContent = vehicle.stnk;
+
+    const gradeBadge = document.getElementById('gradeBadge');
+    gradeBadge.textContent = `Grade ${vehicle.grade}`;
+    gradeBadge.className = `badge ${vehicle.grade === 'A' ? 'badge-success' : vehicle.grade === 'B' ? 'badge-info' : 'badge-warning'}`;
+
+    const statusBadge = document.getElementById('statusBadge');
+    statusBadge.textContent = vehicle.status === 'live' ? 'LIVE' : vehicle.status === 'upcoming' ? 'Upcoming' : 'Selesai';
+    statusBadge.className = `badge ${vehicle.status === 'live' ? 'badge-danger' : vehicle.status === 'upcoming' ? 'badge-warning' : 'badge-gray'}`;
+
+    document.getElementById('totalBids').textContent = `${vehicle.bids.length} bid`;
+
+    renderBidHistory();
+    renderQuickAmounts();
+    startTimer();
+  }
+
+  function renderBidHistory() {
+    const container = document.getElementById('bidHistoryList');
+    if (vehicle.bids.length === 0) {
+      container.innerHTML = '<div style="text-align:center;padding:24px;color:var(--gray-light);">Belum ada bid</div>';
+      return;
+    }
+    container.innerHTML = vehicle.bids.slice().reverse().map((b, i) => `
+      <div class="bid-history-item" style="${i === 0 ? 'background:var(--primary-light);margin:0 -24px;padding:12px 24px;border-radius:var(--radius-sm);' : ''}">
+        <div class="bid-history-avatar">${b.bidder.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+        <div class="bid-info">
+          <div class="bidder">${b.bidder} ${i === 0 ? '<span style="color:var(--accent);font-weight:700;">👑 Tertinggi</span>' : ''}</div>
+          <div class="time">${new Date(b.time).toLocaleString('id-ID')}</div>
+        </div>
+        <div class="bid-amt">${formatRp(b.amount)}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderQuickAmounts() {
+    const container = document.getElementById('quickAmounts');
+    const increments = [vehicle.increment, vehicle.increment * 2, vehicle.increment * 5];
+    container.innerHTML = increments.map(inc => {
+      const amt = vehicle.currentPrice + inc;
+      return `<button class="bid-quick-btn" onclick="placeBid(${amt})">${formatRp(amt)}</button>`;
+    }).join('');
+  }
+
+  function startTimer() {
+    const display = document.getElementById('bidTimer');
+    const priceEl = document.getElementById('currentPrice');
+    const incrEl = document.getElementById('incrementVal');
+
+    priceEl.textContent = formatRp(vehicle.currentPrice);
+    incrEl.textContent = formatRp(vehicle.increment);
+
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      // Reload vehicle data from DB to check for admin updates
+      const freshDb = getDB();
+      const freshVehicle = freshDb.vehicles.find(v => v.id === vehicleId);
+      if (freshVehicle) {
+        vehicle = freshVehicle;
+        // Update price if changed by admin
+        priceEl.textContent = formatRp(vehicle.currentPrice);
+        document.getElementById('totalBids').textContent = `${vehicle.bids.length} bid`;
+      }
+
+      const remaining = vehicle.bidEnd - Date.now();
+      display.textContent = formatTimer(remaining);
+
+      // Update status badge if changed
+      const statusBadge = document.getElementById('statusBadge');
+      if (vehicle.status === 'live') {
+        statusBadge.textContent = 'LIVE';
+        statusBadge.className = 'badge badge-danger';
+      } else if (vehicle.status === 'ended') {
+        statusBadge.textContent = 'Selesai';
+        statusBadge.className = 'badge badge-gray';
+      }
+
+      if (remaining <= 0) {
+        clearInterval(timerInterval);
+        display.textContent = '00:00:00';
+        document.getElementById('bidBtn').disabled = true;
+        document.getElementById('bidBtn').textContent = 'Lelang Selesai';
+
+        if (vehicle.bids.length > 0 && vehicle.bids[0].bidder === getCurrentUser()?.name) {
+          document.getElementById('winnerMsg').textContent = 'Selamat! Anda adalah pemenang lelang ini.';
+        } else {
+          document.getElementById('winnerMsg').textContent = 'Lelang telah berakhir. Terima kasih telah berpartisipasi.';
+        }
+        document.getElementById('winnerModal').classList.add('show');
+      }
+    }, 1000);
+  }
+
+  function placeBid(overrideAmount) {
+    const user = getCurrentUser();
+    if (!user) {
+      showToast('Silakan masuk terlebih dahulu untuk melakukan bid.', 'warning');
+      setTimeout(() => { window.location.href = 'login.html'; }, 1000);
+      return;
+    }
+    if (user.role !== 'member') {
+      showToast('Hanya member yang bisa melakukan bid.', 'error');
+      return;
+    }
+    if (vehicle.status !== 'live') {
+      showToast('Lelang ini belum dimulai atau sudah selesai.', 'warning');
+      return;
+    }
+    const remaining = vehicle.bidEnd - Date.now();
+    if (remaining <= 0) {
+      showToast('Lelang sudah berakhir.', 'error');
+      return;
+    }
+
+    const amount = overrideAmount || (vehicle.currentPrice + vehicle.increment);
+
+    // Anti-sniping: extend if < 30 seconds
+    if (remaining < 30000) {
+      vehicle.bidEnd = Date.now() + 60000;
+      showToast('Anti-sniping aktif! Waktu diperpanjang 60 detik.', 'warning');
+    }
+
+    vehicle.currentPrice = amount;
+    vehicle.bids.push({
+      bidder: user.name,
+      amount: amount,
+      time: Date.now()
+    });
+
+    // Save to DB
+    const db = getDB();
+    const idx = db.vehicles.findIndex(v => v.id === vehicleId);
+    if (idx >= 0) db.vehicles[idx] = vehicle;
+    saveDB(db);
+    autoSaveDB();
+
+    document.getElementById('currentPrice').textContent = formatRp(amount);
+    document.getElementById('totalBids').textContent = `${vehicle.bids.length} bid`;
+    renderBidHistory();
+    renderQuickAmounts();
+    showToast(`Bid berhasil! ${formatRp(amount)}`, 'success');
+  }
+
+  function updateNav() {
+    const user = getCurrentUser();
+    const actions = document.getElementById('navActions');
+    if (user && actions) {
+      const dash = user.role === 'admin' ? 'admin.html' : 'dashboard.html';
+      actions.innerHTML = `<a href="${dash}" class="btn btn-ghost">Dashboard</a><button onclick="logout()" class="btn btn-primary btn-sm">Keluar</button>`;
+    }
+  }
+  updateNav();
+
+  loadVehicle();
+</script>
+</body>
+</html>
