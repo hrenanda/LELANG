@@ -11,14 +11,14 @@ function getDB() {
         { id: 'MBR002', name: 'Siti Rahayu', email: 'siti@email.com', password: 'pass123', role: 'member', status: 'pending', deposit: 0, ktp: '3201234567890002', npwp: '', phone: '08234567890', createdAt: '2026-08-15' }
       ],
       vehicles: [
-        { id: 'V001', name: 'Toyota Avanza 1.5 G', year: 2022, km: 35000, grade: 'A', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Jakarta Utara', img: '🚗', startPrice: 120000000, currentPrice: 135000000, increment: 500000, status: 'live', bidEnd: Date.now() + 3600000, bids: [{ bidder: 'Budi Santoso', amount: 135000000, time: Date.now() - 120000 }] },
-        { id: 'V002', name: 'Honda Brio RS', year: 2023, km: 15000, grade: 'A', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Jakarta Selatan', img: '🚙', startPrice: 150000000, currentPrice: 150000000, increment: 500000, status: 'live', bidEnd: Date.now() + 7200000, bids: [] },
-        { id: 'V003', name: 'Mitsubishi Xpander Ultimate', year: 2021, km: 52000, grade: 'B', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Tangerang', img: '🚐', startPrice: 180000000, currentPrice: 192500000, increment: 500000, status: 'live', bidEnd: Date.now() + 1800000, bids: [{ bidder: 'Budi Santoso', amount: 190000000, time: Date.now() - 300000 }, { bidder: 'Andi Wijaya', amount: 192500000, time: Date.now() - 60000 }] },
-        { id: 'V004', name: 'Suzuki Ertiga GL', year: 2020, km: 68000, grade: 'C', bpkb: 'Proses', stnk: 'Aktif', location: 'Bekasi', img: '🚕', startPrice: 100000000, currentPrice: 108000000, increment: 500000, status: 'live', bidEnd: Date.now() + 900000, bids: [{ bidder: 'Rina Marlina', amount: 108000000, time: Date.now() - 600000 }] },
-        { id: 'V005', name: 'Toyota Innova Reborn VRZ', year: 2023, km: 22000, grade: 'A', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Jakarta Pusat', img: '🚌', startPrice: 320000000, currentPrice: 320000000, increment: 1000000, status: 'upcoming', bidEnd: Date.now() + 86400000, bids: [] },
-        { id: 'V006', name: 'Daihatsu Terios R', year: 2022, km: 41000, grade: 'B', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Depok', img: '🏎️', startPrice: 170000000, currentPrice: 170000000, increment: 500000, status: 'upcoming', bidEnd: Date.now() + 172800000, bids: [] },
-        { id: 'V007', name: 'Honda HR-V Prestige', year: 2021, km: 45000, grade: 'B', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Tangerang Selatan', img: '🚗', startPrice: 250000000, currentPrice: 265000000, increment: 500000, status: 'ended', bidEnd: Date.now() - 3600000, bids: [{ bidder: 'Budi Santoso', amount: 265000000, time: Date.now() - 7200000 }] },
-        { id: 'V008', name: 'Wuling Cortez CT', year: 2022, km: 30000, grade: 'A', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Jakarta Barat', img: '🚐', startPrice: 200000000, currentPrice: 200000000, increment: 500000, status: 'upcoming', bidEnd: Date.now() + 259200000, bids: [] }
+        { id: 'V001', name: 'Toyota Avanza 1.5 G', year: 2022, km: 35000, grade: 'A', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Jakarta Utara', img: '🚗', imageUrl: 'https://picsum.photos/seed/avanza/600/400', startPrice: 120000000, currentPrice: 135000000, increment: 500000, status: 'live', bidEnd: Date.now() + 3600000, bids: [{ bidder: 'Budi Santoso', amount: 135000000, time: Date.now() - 120000 }] },
+        { id: 'V002', name: 'Honda Brio RS', year: 2023, km: 15000, grade: 'A', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Jakarta Selatan', img: '🚙', imageUrl: 'https://picsum.photos/seed/brio/600/400', startPrice: 150000000, currentPrice: 150000000, increment: 500000, status: 'live', bidEnd: Date.now() + 7200000, bids: [] },
+        { id: 'V003', name: 'Mitsubishi Xpander Ultimate', year: 2021, km: 52000, grade: 'B', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Tangerang', img: '🚐', imageUrl: 'https://picsum.photos/seed/xpander/600/400', startPrice: 180000000, currentPrice: 192500000, increment: 500000, status: 'live', bidEnd: Date.now() + 1800000, bids: [{ bidder: 'Budi Santoso', amount: 190000000, time: Date.now() - 300000 }, { bidder: 'Andi Wijaya', amount: 192500000, time: Date.now() - 60000 }] },
+        { id: 'V004', name: 'Suzuki Ertiga GL', year: 2020, km: 68000, grade: 'C', bpkb: 'Proses', stnk: 'Aktif', location: 'Bekasi', img: '🚕', imageUrl: 'https://picsum.photos/seed/ertiga/600/400', startPrice: 100000000, currentPrice: 108000000, increment: 500000, status: 'live', bidEnd: Date.now() + 900000, bids: [{ bidder: 'Rina Marlina', amount: 108000000, time: Date.now() - 600000 }] },
+        { id: 'V005', name: 'Toyota Innova Reborn VRZ', year: 2023, km: 22000, grade: 'A', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Jakarta Pusat', img: '🚌', imageUrl: 'https://picsum.photos/seed/innova/600/400', startPrice: 320000000, currentPrice: 320000000, increment: 1000000, status: 'upcoming', bidEnd: Date.now() + 86400000, bids: [] },
+        { id: 'V006', name: 'Daihatsu Terios R', year: 2022, km: 41000, grade: 'B', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Depok', img: '🏎️', imageUrl: 'https://picsum.photos/seed/terios/600/400', startPrice: 170000000, currentPrice: 170000000, increment: 500000, status: 'upcoming', bidEnd: Date.now() + 172800000, bids: [] },
+        { id: 'V007', name: 'Honda HR-V Prestige', year: 2021, km: 45000, grade: 'B', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Tangerang Selatan', img: '🚗', imageUrl: 'https://picsum.photos/seed/hrv/600/400', startPrice: 250000000, currentPrice: 265000000, increment: 500000, status: 'ended', bidEnd: Date.now() - 3600000, bids: [{ bidder: 'Budi Santoso', amount: 265000000, time: Date.now() - 7200000 }] },
+        { id: 'V008', name: 'Wuling Cortez CT', year: 2022, km: 30000, grade: 'A', bpkb: 'Lengkap', stnk: 'Aktif', location: 'Jakarta Barat', img: '🚐', imageUrl: 'https://picsum.photos/seed/cortez/600/400', startPrice: 200000000, currentPrice: 200000000, increment: 500000, status: 'upcoming', bidEnd: Date.now() + 259200000, bids: [] }
       ],
       transactions: [
         { id: 'TX001', userId: 'MBR001', vehicleId: 'V007', amount: 265000000, fee: 5000000, tax: 26500000, status: 'paid', createdAt: '2026-08-20' },
@@ -52,7 +52,7 @@ function showToast(msg, type = 'success') {
   }
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  const icons = { success: '✅', error: '❌', warning: '⚠️' };
+  const icons = { success: '✅', error: '❌', warning: '⚠️', info: '🔄' };
   toast.innerHTML = `<span>${icons[type] || ''}</span><span class="toast-msg">${msg}</span>`;
   container.appendChild(toast);
   setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(40px)'; setTimeout(() => toast.remove(), 300); }, 3500);
@@ -62,6 +62,55 @@ function showToast(msg, type = 'success') {
 function formatRp(num) {
   return 'Rp ' + Number(num).toLocaleString('id-ID');
 }
+
+// ===== AUTO-SYNC BETWEEN TABS =====
+let lastDataHash = '';
+function getDataHash() {
+  return localStorage.getItem(DB_KEY) || '';
+}
+
+function checkForUpdates() {
+  const currentHash = getDataHash();
+  if (lastDataHash && currentHash !== lastDataHash) {
+    // Data changed in another tab!
+    showToast('Data baru diperbarui dari panel admin.', 'info');
+    setTimeout(() => location.reload(), 800);
+  }
+  lastDataHash = currentHash;
+}
+
+// Listen for storage changes from other tabs
+window.addEventListener('storage', function(e) {
+  if (e.key === DB_KEY && e.newValue) {
+    showToast('Data lelang diperbarui! Memuat ulang...', 'info');
+    setTimeout(() => location.reload(), 600);
+  }
+  if (e.key === HERO_KEY && e.newValue) {
+    if (typeof loadHeroContent === 'function') {
+      loadHeroContent();
+    }
+  }
+});
+
+// Periodic check every 2 seconds (for same-tab updates)
+setInterval(checkForUpdates, 2000);
+
+// Initialize hash on page load
+lastDataHash = getDataHash();
+
+// Show sync notification badge
+function showSyncBadge() {
+  if (document.querySelector('.sync-badge')) return;
+  const badge = document.createElement('div');
+  badge.className = 'sync-badge';
+  badge.innerHTML = '🔄';
+  badge.style.cssText = 'position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:var(--shadow-lg);z-index:9998;cursor:pointer;animation:pulse 2s infinite;';
+  badge.title = 'Auto-sync aktif';
+  badge.onclick = () => location.reload();
+  document.body.appendChild(badge);
+}
+if (document.readyState === 'complete') showSyncBadge();
+else window.addEventListener('load', showSyncBadge);
 
 // ===== NAVBAR SCROLL =====
 window.addEventListener('scroll', () => {
