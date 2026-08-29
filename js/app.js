@@ -105,3 +105,57 @@ function animateNum(el, target, duration = 800) {
   }
   requestAnimationFrame(tick);
 }
+
+// ===== HERO CONTENT MANAGEMENT =====
+const HERO_KEY = 'lelang_hero_content';
+
+function getDefaultHero() {
+  return {
+    badge: 'Lelang Sedang Berlangsung',
+    title: 'Platform Lelang <span>Kendaraan</span> Terpercaya',
+    description: 'Sistem lelang aset kendaraan yang transparan, cepat, dan efisien. Bergabung sebagai member untuk mengikuti lelang mobil pilihan Anda secara real-time.',
+    companyName: 'PT Multinet Perkasa',
+    liveCount: '4',
+    memberCount: '1,248',
+    totalValue: '47jt',
+    transCount: '23 Terjual',
+    progressPercent: 75
+  };
+}
+
+function getHeroContent() {
+  const raw = localStorage.getItem(HERO_KEY);
+  if (!raw) {
+    const defaultHero = getDefaultHero();
+    localStorage.setItem(HERO_KEY, JSON.stringify(defaultHero));
+    return defaultHero;
+  }
+  return JSON.parse(raw);
+}
+
+function saveHeroContent(hero) {
+  localStorage.setItem(HERO_KEY, JSON.stringify(hero));
+}
+
+function loadHeroContent() {
+  const hero = getHeroContent();
+  const badge = document.getElementById('heroBadgeText');
+  const title = document.getElementById('heroTitle');
+  const desc = document.getElementById('heroDesc');
+  const companyName = document.querySelector('.hero-card h4');
+  const liveCount = document.getElementById('heroLiveCount');
+  const memberCount = document.getElementById('heroMemberCount');
+  const totalValue = document.getElementById('heroTotalValue');
+  const transCount = document.getElementById('heroTransCount');
+  const progressFill = document.querySelector('.hero-progress .progress-fill');
+
+  if (badge) badge.textContent = hero.badge;
+  if (title) title.innerHTML = hero.title;
+  if (desc) desc.textContent = hero.description;
+  if (companyName) companyName.textContent = hero.companyName;
+  if (liveCount) liveCount.textContent = hero.liveCount;
+  if (memberCount) memberCount.textContent = hero.memberCount;
+  if (totalValue) totalValue.textContent = hero.totalValue;
+  if (transCount) transCount.textContent = hero.transCount;
+  if (progressFill) progressFill.style.width = hero.progressPercent + '%';
+}
