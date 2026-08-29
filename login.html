@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk - LelangKu</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-page">
+  <!-- LEFT PANEL -->
+  <div class="auth-left">
+    <div class="content">
+      <h2>Selamat Datang Kembali di <span>LelangKu</span></h2>
+      <p>Masuk ke akun Anda dan ikuti lelang kendaraan terbaik yang sedang berlangsung.</p>
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">⚡</div>
+          <div>
+            <h4>Bidding Real-Time</h4>
+            <p>Lelang berlangsung live dengan sistem anti-sniping</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📊</div>
+          <div>
+            <h4>Dashboard Personal</h4>
+            <p>Pantau riwayat bid, saldo deposit, dan status lelang</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🔔</div>
+          <div>
+            <h4>Notifikasi Otomatis</h4>
+            <p>Info update lelang via email & push notification</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="auth-right">
+    <div class="auth-form-container">
+      <div class="brand">
+        <div class="logo-icon">LK</div>
+        LelangKu
+      </div>
+      <h2>Masuk ke Akun</h2>
+      <p class="subtitle">Masukkan email dan password Anda</p>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <div class="input-wrap">
+            <span class="icon">📧</span>
+            <input type="email" id="loginEmail" class="form-control" placeholder="email@contoh.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPass">Password</label>
+          <div class="input-wrap">
+            <span class="icon">🔒</span>
+            <input type="password" id="loginPass" class="form-control" placeholder="Masukkan password" required>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+          <label class="form-check">
+            <input type="checkbox" id="rememberMe"> Ingat saya
+          </label>
+          <a href="#" style="font-size:.85rem;color:var(--primary);font-weight:500;">Lupa password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Masuk</button>
+
+        <div class="divider"><span>atau</span></div>
+
+        <div class="social-btns">
+          <button type="button" class="social-btn">📱 Google</button>
+          <button type="button" class="social-btn">💬 WhatsApp</button>
+        </div>
+
+        <div class="auth-footer">
+          Belum punya akun? <a href="register.html">Daftar di sini</a>
+        </div>
+      </form>
+
+      <!-- Demo Accounts Info -->
+      <div style="margin-top:24px;padding:16px;background:var(--gray-50);border-radius:var(--radius-sm);border:1px dashed var(--gray-lighter);">
+        <p style="font-size:.75rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Akun Demo</p>
+        <div style="font-size:.8rem;color:var(--dark-600);line-height:1.8;">
+          <strong>Admin:</strong> admin@multinet.co.id / admin123<br>
+          <strong>Member:</strong> budi@email.com / pass123
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPass').value;
+
+    const db = getDB();
+    const user = db.users.find(u => u.email === email && u.password === password);
+
+    if (!user) {
+      showToast('Email atau password salah!', 'error');
+      return;
+    }
+
+    if (user.status === 'pending') {
+      showToast('Akun Anda masih menunggu verifikasi admin.', 'warning');
+      return;
+    }
+
+    setCurrentUser(user);
+    showToast(`Selamat datang, ${user.name}!`, 'success');
+
+    setTimeout(() => {
+      window.location.href = user.role === 'admin' ? 'admin.html' : 'dashboard.html';
+    }, 800);
+  });
+</script>
+</body>
+</html>

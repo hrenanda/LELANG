@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - LelangKu</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-brand">
+      <div class="logo-icon">LK</div>
+      LelangKu
+    </a>
+    <div class="navbar-nav">
+      <a href="katalog.html">Katalog</a>
+      <a href="dashboard.html" class="active">Dashboard</a>
+    </div>
+    <div class="navbar-actions" id="navActions">
+      <button onclick="logout()" class="btn btn-primary btn-sm">Keluar</button>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-profile">
+      <div class="sidebar-avatar" id="userAvatar">--</div>
+      <div>
+        <h4 id="userName">--</h4>
+        <p id="userEmail">--</p>
+      </div>
+    </div>
+    <div class="sidebar-menu">
+      <div class="menu-label">Menu Utama</div>
+      <a href="dashboard.html" class="active"><span class="icon">📊</span> Dashboard</a>
+      <a href="katalog.html"><span class="icon">🚗</span> Katalog Aset</a>
+      <a href="#"><span class="icon">🔨</span> Lelang Aktif <span class="badge" id="liveCount">0</span></a>
+      <div class="menu-label">Transaksi</div>
+      <a href="#"><span class="icon">💰</span> Deposit Saya</a>
+      <a href="#"><span class="icon">🧾</span> Riwayat Bid</a>
+      <a href="#"><span class="icon">🏆</span> Kemenangan</a>
+      <div class="menu-label">Akun</div>
+      <a href="#"><span class="icon">👤</span> Profil Saya</a>
+      <a href="#"><span class="icon">📋</span> Status Verifikasi</a>
+      <a href="#"><span class="icon">⚙️</span> Pengaturan</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="page-header">
+      <h1>Dashboard Member</h1>
+      <p>Selamat datang kembali! Berikut ringkasan aktivitas lelang Anda.</p>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="dash-stats" id="statCards">
+      <div class="dash-stat-card">
+        <div class="dash-stat-icon blue">💰</div>
+        <div class="dash-stat-text">
+          <h3 id="statDeposit">--</h3>
+          <p>Saldo Deposit</p>
+          <div class="change up">Siap untuk bidding</div>
+        </div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dash-stat-icon amber">🔨</div>
+        <div class="dash-stat-text">
+          <h3 id="statBid">--</h3>
+          <p>Total Bid</p>
+          <div class="change up" id="statBidChange">--</div>
+        </div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dash-stat-icon green">🏆</div>
+        <div class="dash-stat-text">
+          <h3 id="statWin">--</h3>
+          <p>Menang Lelang</p>
+          <div class="change up">--</div>
+        </div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dash-stat-icon red">📄</div>
+        <div class="dash-stat-text">
+          <h3 id="statStatus">--</h3>
+          <p>Status Akun</p>
+          <div class="change" id="statStatusChange">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVE AUCTIONS -->
+    <div class="card" style="margin-bottom:24px;">
+      <div class="card-header">
+        <h3>Lelang Aktif Saat Ini</h3>
+        <a href="katalog.html" class="btn btn-sm btn-secondary">Lihat Semua</a>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Unit</th>
+                <th>Grade</th>
+                <th>Harga Saat Ini</th>
+                <th>Sisa Waktu</th>
+                <th>Bid Tertinggi</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="liveAuctionTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENT BIDS -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Riwayat Bid Terakhir</h3>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Unit</th>
+                <th>Jumlah Bid</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="bidHistoryTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  const user = requireAuth();
+  if (!user) throw new Error('Not logged in');
+
+  // Populate sidebar
+  document.getElementById('userAvatar').textContent = user.name.split(' ').map(n=>n[0]).join('').slice(0,2);
+  document.getElementById('userName').textContent = user.name;
+  document.getElementById('userEmail').textContent = user.email;
+
+  // Stats
+  const db = getDB();
+  const myBids = [];
+  let myWins = 0;
+  db.vehicles.forEach(v => {
+    v.bids.forEach(b => {
+      if (b.bidder === user.name) myBids.push({ vehicle: v.name, amount: b.amount, time: b.time });
+    });
+    if (v.status === 'ended' && v.bids.length > 0) {
+      const top = v.bids.reduce((a, b) => a.amount > b.amount ? a : b);
+      if (top.bidder === user.name) myWins++;
+    }
+  });
+
+  document.getElementById('statDeposit').textContent = formatRp(user.deposit);
+  document.getElementById('statBid').textContent = myBids.length;
+  document.getElementById('statWin').textContent = myWins;
+  document.getElementById('statStatus').textContent = user.status === 'verified' ? 'Aktif' : 'Pending';
+  document.getElementById('statStatusChange').textContent = user.status === 'verified' ? 'Terverifikasi' : 'Menunggu verifikasi admin';
+  document.getElementById('statStatusChange').className = 'change ' + (user.status === 'verified' ? 'up' : 'down');
+
+  // Live auctions
+  const liveVehicles = db.vehicles.filter(v => v.status === 'live');
+  document.getElementById('liveCount').textContent = liveVehicles.length;
+  const tbody = document.getElementById('liveAuctionTable');
+  liveVehicles.forEach(v => {
+    const remaining = v.bidEnd - Date.now();
+    const isTopBidder = v.bids.length > 0 && v.bids[0].bidder === user.name;
+    tbody.innerHTML += `
+      <tr>
+        <td><strong>${v.name}</strong><br><span style="font-size:.75rem;color:var(--gray);">${v.year} &middot; ${v.km.toLocaleString('id-ID')} km &middot; ${v.location}</span></td>
+        <td><span class="badge ${v.grade === 'A' ? 'badge-success' : v.grade === 'B' ? 'badge-info' : 'badge-warning'}">Grade ${v.grade}</span></td>
+        <td><strong style="color:var(--primary)">${formatRp(v.currentPrice)}</strong></td>
+        <td><span style="font-variant-numeric:tabular-nums;font-weight:600;">${formatTimer(remaining)}</span></td>
+        <td>${v.bids.length > 0 ? v.bids[0].bidder : '<span style="color:var(--gray-light)">-</span>'}</td>
+        <td><a href="bidding.html?id=${v.id}" class="btn btn-sm ${isTopBidder ? 'btn-success' : 'btn-primary'}">${isTopBidder ? 'Memimpin' : 'Bid Sekarang'}</a></td>
+      </tr>`;
+  });
+
+  // Bid history
+  const histBody = document.getElementById('bidHistoryTable');
+  myBids.sort((a, b) => b.time - a.time).slice(0, 5).forEach(b => {
+    histBody.innerHTML += `
+      <tr>
+        <td>${new Date(b.time).toLocaleString('id-ID')}</td>
+        <td>${b.vehicle}</td>
+        <td><strong>${formatRp(b.amount)}</strong></td>
+        <td><span class="badge badge-info">Bid Terkirim</span></td>
+      </tr>`;
+  });
+  if (myBids.length === 0) {
+    histBody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--gray-light);padding:32px;">Belum ada riwayat bid</td></tr>';
+  }
+</script>
+</body>
+</html>
